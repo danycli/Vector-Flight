@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class EventHandler extends Application {
@@ -45,42 +47,54 @@ public class EventHandler extends Application {
         bk.setTranslateX(stage.getWidth());
 
         // Obstacles(Pipes)
+        ArrayList<Rectangle> allRecs = new ArrayList<>();
         ArrayList<ImageView> obstacles = new ArrayList<>();
-        ArrayList<ImageView> toRemove = new ArrayList<>();
+        ArrayList<ImageView> obstaclesRemove = new ArrayList<>();
+        ArrayList<Rectangle> recRemove = new ArrayList<>();
 
+        Rectangle pipe1 = new Rectangle(210,395);
+        pipe1.setVisible(false);
+        allRecs.add(pipe1);
         Image downwards = new Image(getClass().getResourceAsStream("/Downwards.png"));
         ImageView down = new ImageView(downwards);
         // down.set
         down.setFitHeight(400);
         down.setTranslateY(0);
         down.setTranslateX(stage.getWidth());
+        pipe1.setTranslateY(0);
+        pipe1.setTranslateX(stage.getWidth() + 55);
         // down.setPickOnBounds(false);
         obstacles.add(down);
 
+        Rectangle pipe2 = new Rectangle(210,395);
+        pipe2.setVisible(false);
+        allRecs.add(pipe2);
         Image upwards = new Image(getClass().getResourceAsStream("/Upwards.png"));
         ImageView up = new ImageView(upwards);
         up.setFitHeight(400);
         up.setTranslateY(stage.getHeight() - up.getFitHeight());
         up.setTranslateX(stage.getWidth() - 4);
+        pipe2.setTranslateY(stage.getHeight() - pipe2.getHeight());
+        pipe2.setTranslateX(stage.getWidth() - 51);
         // up.setPickOnBounds(false);
         obstacles.add(up);
 
-        root.getChildren().add(down);
-        root.getChildren().add(up);
+        root.getChildren().add(pipe1);
+        root.getChildren().add(pipe2);
 
+        Circle forPlayer = new Circle(30);
+        forPlayer.setVisible(false);
+        forPlayer.setTranslateX(stage.getWidth() / 2 + 50);
+        forPlayer.setTranslateY(stage.getHeight() / 2 +50);
         Image bird = new Image(getClass().getResourceAsStream("/ghost1.png"));
         ImageView player = new ImageView(bird);
         player.setTranslateX(stage.getWidth() / 2);
         player.setTranslateY(stage.getHeight() / 2);
-        // player.setPickOnBounds(false);
-        // player.setStyle("""
-        //         -fx-background-image: url("/ghost1.png");
-        //         -fx-background-repeat: no-repeat;
-        //         -fx-shape: "M 0 0 L 100 0 L 100 100 L 0 100 Z";
-        //         -fx-scale-shape: true;
-        //         """);
 
         root.getChildren().add(player);
+        root.getChildren().add(forPlayer);
+        root.getChildren().add(down);
+        root.getChildren().add(up);
 
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ESCAPE && !escapePressed) {
@@ -91,6 +105,7 @@ public class EventHandler extends Application {
                 escapePressed = true;
             } else if (e.getCode() == KeyCode.SPACE && !playerBumped) {
                 player.setTranslateY(player.getTranslateY() - 70);
+                forPlayer.setTranslateY(forPlayer.getTranslateY() - 70);
             }
         });
 
@@ -101,6 +116,7 @@ public class EventHandler extends Application {
 
                 if (!playerBumped) {
                     player.setTranslateY(player.getTranslateY() + 2);
+                    forPlayer.setTranslateY(forPlayer.getTranslateY() + 2);
                     bg.setTranslateX(bg.getTranslateX() - 3);
                     bk.setTranslateX(bk.getTranslateX() - 3);
                     if (bk.getTranslateX() == 0 && !playerBumped) {
@@ -111,41 +127,68 @@ public class EventHandler extends Application {
                     for (ImageView img : obstacles) {
                         img.setTranslateX(img.getTranslateX() - 3);
                         if (img.getTranslateX() < -300) {
-                            toRemove.add(img);
+                            obstaclesRemove.add(img);
                             root.getChildren().remove(img);
                         }
-                        //Bumping of player in to obstacle
-                        if (player.getBoundsInParent().intersects(img.getBoundsInParent())) {
+                    }
+                }
+                obstacles.removeAll(obstaclesRemove);
+                obstaclesRemove.clear();
+                for(Rectangle rec : allRecs){
+                    rec.setTranslateX(rec.getTranslateX() - 3);
+                    if (rec.getTranslateX() < -300) {
+                        recRemove.add(rec);
+                        root.getChildren().remove(rec);
+                    }
+                    //Bumping of player in to obstacle
+                        if (forPlayer.getBoundsInParent().intersects(rec.getBoundsInParent())) {
                         playerBumped = true;
                         break;
                     }
-                    }
                 }
-                obstacles.removeAll(toRemove);
-                toRemove.clear();
+                allRecs.removeAll(recRemove);
+                recRemove.clear();
 
                 Random random = new Random();
                 int randomNum = random.nextInt(10, 300);
 
                 if (obstacles.get(obstacles.size() - 1).getTranslateX() <= stage.getWidth() / 2 + randomNum && !playerBumped) {
                     // int randomInt = random.nextInt(0,500);
+                    Rectangle pipeDown = new Rectangle(210,395);
+                    pipeDown.setVisible(false);
+                    
                     ImageView addDown = new ImageView(downwards);
                     addDown.setFitHeight(400);
                     addDown.setTranslateY(0);
                     addDown.setTranslateX(stage.getWidth());
+                    pipeDown.setTranslateY(0);
+                    pipeDown.setTranslateX(stage.getWidth() + 55);
                     obstacles.add(addDown);
+                    allRecs.add(pipeDown);
 
+                    Rectangle pipeUp = new Rectangle(210,395);
+                    pipeUp.setVisible(false);
                     ImageView addUp = new ImageView(upwards);
                     addUp.setFitHeight(400);
                     addUp.setTranslateY(stage.getHeight() - addUp.getFitHeight());
                     addUp.setTranslateX(stage.getWidth() - 4);
+                    pipeUp.setTranslateY(stage.getHeight() - pipeUp.getHeight());
+                    pipeUp.setTranslateX(stage.getWidth() + 51);
+                    allRecs.add(pipeUp);
                     obstacles.add(addUp);
 
                     root.getChildren().add(addDown);
                     root.getChildren().add(addUp);
+                    root.getChildren().add(pipeDown);
+                    root.getChildren().add(pipeUp);
                 }
                 if (player.getTranslateY() + 70 >= stage.getHeight() && !playerBumped) {
                     playerBumped = true;
+                }
+
+                if (playerBumped) {
+                    player.setTranslateY(player.getTranslateY() + 5);
+                    player.setScaleY(-1);
                 }
             }
 
