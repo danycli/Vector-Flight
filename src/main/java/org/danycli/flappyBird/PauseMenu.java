@@ -16,10 +16,10 @@ public class PauseMenu {
         StackPane root = new StackPane();
         Scene scene = new Scene(root,400,550);
 
-        Button resume = Styling.buttonStyling("RESUME", -30);
+        Button resume = Styling.buttonStyling("RESUME", -50);
         resume.setFont(Font.font("Amasis MT Pro Black",30));
 
-        Button exit = Styling.buttonStyling("Quit Game", 30);
+        Button exit = Styling.buttonStyling("Quit Game", 50);
         exit.setFont(Font.font("Amasis MT Pro Black",30));
 
         root.getChildren().add(resume);
