@@ -16,12 +16,12 @@ import javafx.stage.Stage;
 
 public class EventHandler extends Application {
     private boolean escapePressed;
-    private boolean playerBumped = false;
+    private boolean playerBumped;
 
     @Override
     public void start(Stage stage) throws Exception {
         escapePressed = false;
-        // playerBumped = false;
+        playerBumped = false;
 
         Group root = new Group();
         Scene scene = new Scene(root);
@@ -38,6 +38,7 @@ public class EventHandler extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setFullScreen(true);
+        stage.fullScreenExitHintProperty().set("Press Esc to pause the game");
         stage.show();
 
         bg.setFitHeight(stage.getHeight() + 20);
@@ -96,6 +97,7 @@ public class EventHandler extends Application {
         root.getChildren().add(down);
         root.getChildren().add(up);
 
+        PauseMenu menu = new PauseMenu();
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ESCAPE && !escapePressed) {
                 stage.setHeight(stage.getHeight() - 10);
@@ -103,6 +105,7 @@ public class EventHandler extends Application {
                 stage.setX(0);
                 stage.setY(0);
                 escapePressed = true;
+                menu.pauseMenu();
             } else if (e.getCode() == KeyCode.SPACE && !playerBumped) {
                 player.setTranslateY(player.getTranslateY() - 70);
                 forPlayer.setTranslateY(forPlayer.getTranslateY() - 70);
@@ -115,8 +118,8 @@ public class EventHandler extends Application {
             public void handle(long now) {
 
                 if (!playerBumped) {
-                    player.setTranslateY(player.getTranslateY() + 2);
-                    forPlayer.setTranslateY(forPlayer.getTranslateY() + 2);
+                    player.setTranslateY(player.getTranslateY() + 3);
+                    forPlayer.setTranslateY(forPlayer.getTranslateY() + 3);
                     bg.setTranslateX(bg.getTranslateX() - 3);
                     bk.setTranslateX(bk.getTranslateX() - 3);
                     if (bk.getTranslateX() == 0 && !playerBumped) {
@@ -125,7 +128,7 @@ public class EventHandler extends Application {
                         bk.setTranslateX(stage.getWidth());
                     }
                     for (ImageView img : obstacles) {
-                        img.setTranslateX(img.getTranslateX() - 3);
+                        img.setTranslateX(img.getTranslateX() - 5);
                         if (img.getTranslateX() < -300) {
                             obstaclesRemove.add(img);
                             root.getChildren().remove(img);
@@ -135,7 +138,7 @@ public class EventHandler extends Application {
                 obstacles.removeAll(obstaclesRemove);
                 obstaclesRemove.clear();
                 for(Rectangle rec : allRecs){
-                    rec.setTranslateX(rec.getTranslateX() - 3);
+                    rec.setTranslateX(rec.getTranslateX() - 5);
                     if (rec.getTranslateX() < -300) {
                         recRemove.add(rec);
                         root.getChildren().remove(rec);
@@ -153,27 +156,26 @@ public class EventHandler extends Application {
                 int randomNum = random.nextInt(10, 300);
 
                 if (obstacles.get(obstacles.size() - 1).getTranslateX() <= stage.getWidth() / 2 + randomNum && !playerBumped) {
-                    // int randomInt = random.nextInt(0,500);
-                    Rectangle pipeDown = new Rectangle(210,395);
-                    pipeDown.setVisible(false);
-                    
+                    int yAxisOfObstacle = random.nextInt(100,400);
+                    yAxisOfObstacle = -yAxisOfObstacle;
+
                     ImageView addDown = new ImageView(downwards);
-                    addDown.setFitHeight(400);
-                    addDown.setTranslateY(0);
+                    addDown.setTranslateY(yAxisOfObstacle);
                     addDown.setTranslateX(stage.getWidth());
-                    pipeDown.setTranslateY(0);
+                    Rectangle pipeDown = new Rectangle(210,650);
+                    pipeDown.setVisible(false);
+                    pipeDown.setTranslateY(yAxisOfObstacle);
                     pipeDown.setTranslateX(stage.getWidth() + 55);
                     obstacles.add(addDown);
                     allRecs.add(pipeDown);
 
-                    Rectangle pipeUp = new Rectangle(210,395);
-                    pipeUp.setVisible(false);
                     ImageView addUp = new ImageView(upwards);
-                    addUp.setFitHeight(400);
-                    addUp.setTranslateY(stage.getHeight() - addUp.getFitHeight());
-                    addUp.setTranslateX(stage.getWidth() - 4);
-                    pipeUp.setTranslateY(stage.getHeight() - pipeUp.getHeight());
-                    pipeUp.setTranslateX(stage.getWidth() + 51);
+                    addUp.setTranslateY(stage.getHeight() - addUp.getLayoutBounds().getHeight() + (450 + yAxisOfObstacle));
+                    addUp.setTranslateX(stage.getWidth());
+                    Rectangle pipeUp = new Rectangle(210,650);
+                    pipeUp.setVisible(false);
+                    pipeUp.setTranslateY(stage.getHeight() - addUp.getLayoutBounds().getHeight() + (500 + yAxisOfObstacle));
+                    pipeUp.setTranslateX(stage.getWidth() + 55);
                     allRecs.add(pipeUp);
                     obstacles.add(addUp);
 
