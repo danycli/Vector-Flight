@@ -1,5 +1,11 @@
 package org.danycli.flappyBird;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -25,16 +31,19 @@ public class EventHandler extends Application {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
     private AnimationTimer gameloop;
     private String gameMod;
+    private long highScore;
 
     @Override
     public void start(Stage args0) throws Exception{
         MainMenu mainMenu = new MainMenu();
         mainMenu.mainMENU(EventHandler.this);
     }
+    @SuppressWarnings("ConvertToTryWithResources")
     public void startGame(){
         playerBumped = false;
         pauseTheGame = false;
         score = 0;
+        highScore = 0;
         if (gameMod == null) {
             gameMod = "Heaven";
         }
@@ -43,12 +52,32 @@ public class EventHandler extends Application {
         Group root = new Group();
         Scene scene = new Scene(root);
 
-        //Setting the props on the stage
+        //Getting HighScore
+        try {
+            File file = SaveManager.getStatsFile();
+            if (file.createNewFile()) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write("Score = "+score);
+                writer.close();
+            }
+            BufferedReader read = new BufferedReader(new FileReader(file));
+            String line = read.readLine();
+            if (line != null) {
+                String[] sp = line.split(" ");
+                highScore = Integer.parseInt(sp[sp.length-1]);
+                read.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong wile fetching high score");
+        }
+
+
         // Background
         Image back = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"1.png"));
         ImageView bg = new ImageView(back);
         Image back2 = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"2.png"));
         ImageView bk = new ImageView(back2);
+        
         Text scoreBoard = new Text("SCORE = "+score);
         scoreBoard.setTranslateX(10);
         scoreBoard.setTranslateY(50);
@@ -66,10 +95,27 @@ public class EventHandler extends Application {
         scoreRectangle.setTranslateX(0);
         scoreRectangle.setTranslateY(0);
 
+        Text HighScoreBoard = new Text("HIGH SCORE = "+highScore);
+        HighScoreBoard.setTranslateY(50);
+        HighScoreBoard.setFont(font);
+        HighScoreBoard.setFill(Color.ALICEBLUE);
+
+        Rectangle HighScoreRectangle = new Rectangle();
+        HighScoreRectangle.setStyle(
+            "-fx-fill: #00d8fe7b;" +
+            "-fx-arc-width: 30;" +
+            "-fx-arc-height: 30;"
+        );
+        HighScoreRectangle.setWidth(HighScoreBoard.getLayoutBounds().getWidth() + 15);
+        HighScoreRectangle.setHeight(HighScoreBoard.getLayoutBounds().getHeight() + 10);
+        HighScoreRectangle.setTranslateY(0);
+
         root.getChildren().add(bg);
         root.getChildren().add(bk);
         root.getChildren().add(scoreRectangle);
         root.getChildren().add(scoreBoard);
+        root.getChildren().add(HighScoreBoard);
+        root.getChildren().add(HighScoreRectangle);
 
         stage.setScene(scene);
         stage.setResizable(false);
@@ -78,6 +124,9 @@ public class EventHandler extends Application {
         stage.setMinHeight(stage.getHeight() - 10);
         stage.setMinWidth(stage.getWidth() - 10);
         stage.show();
+
+        HighScoreBoard.setTranslateX(stage.getWidth() - (HighScoreBoard.getLayoutBounds().getWidth() + 15));
+        HighScoreRectangle.setTranslateX(stage.getWidth() - (HighScoreRectangle.getLayoutBounds().getWidth() + 15));
 
         bg.setFitHeight(stage.getHeight() + 20);
         bg.setFitWidth(stage.getWidth() + 20);
@@ -175,6 +224,10 @@ public class EventHandler extends Application {
                     }
                     for (ImageView img : obstacles) {
                         img.setTranslateX(img.getTranslateX() - 5);
+                        scoreRectangle.toFront();
+                        scoreBoard.toFront();
+                        HighScoreRectangle.toFront();
+                        HighScoreBoard.toFront();
                         if (img.getTranslateX() < -300) {
                             obstaclesRemove.add(img);
                             root.getChildren().remove(img);
@@ -186,8 +239,6 @@ public class EventHandler extends Application {
                 if (rec.getTranslateX() == stage.getWidth()/2 + 10) {
                     score++;
                     scoreBoard.setText("SCORE = "+score/2);
-                    scoreRectangle.toFront();
-                    scoreBoard.toFront();
                     scoreRectangle.setWidth(scoreBoard.getLayoutBounds().getWidth() + 15);
                     scoreRectangle.setHeight(scoreBoard.getLayoutBounds().getHeight() + 10);
                 }
@@ -254,8 +305,10 @@ public class EventHandler extends Application {
             }
             pauseTheGame = menu.resumeGame();
             if (playerBumped && player.getTranslateY() >= stage.getHeight()) {
+                score /= 2;
+                CheckHighScore();
                 GameOver over = new GameOver();
-                over.gameOver();
+                over.gameOver(score,highScore);
                 stage.close();
                 gameloop.stop();
             }
@@ -265,5 +318,30 @@ public class EventHandler extends Application {
     }
     public void setMod(String mod){
         gameMod = mod;
+    }
+    @SuppressWarnings("ConvertToTryWithResources")
+    private void CheckHighScore(){
+        try {
+            File file = SaveManager.getStatsFile();
+            if (file.createNewFile()) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write("Score = "+score);
+                writer.close();
+            }
+            BufferedReader read = new BufferedReader(new FileReader(file));
+            String line = read.readLine();
+            if (line != null) {
+                if (highScore < score) {
+                    highScore = score;
+                    System.out.println("High Score = "+highScore);
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                    writer.write("Score = "+highScore);
+                    writer.close();
+                }
+                read.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong wile setting high score");
+        }
     }
 }

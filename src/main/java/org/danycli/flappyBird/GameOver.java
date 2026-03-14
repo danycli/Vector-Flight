@@ -11,8 +11,12 @@ import javafx.stage.StageStyle;
 public class GameOver {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
     private String mod;
+    private long score;
+    private long highScore;
     
-    public void gameOver(){
+    public void gameOver(long scoree, long highScoree){
+        score = scoree;
+        highScore = highScoree;
         mod = null;
 
         Stage stage = new Stage();
@@ -47,6 +51,10 @@ public class GameOver {
         gameMod.setOnAction(e ->{
             GameMod Mod = new GameMod();
             Mod.mod(menu,GameOver.this);
+        });
+        summary.setOnAction(e ->{
+            GameStats stats = new GameStats();
+            stats.gameStats(score, highScore);
         });
         exit.setOnAction(e ->{
             stage.close();
