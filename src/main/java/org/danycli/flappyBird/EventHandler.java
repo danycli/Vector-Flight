@@ -23,13 +23,19 @@ public class EventHandler extends Application {
     private final PauseMenu menu = new PauseMenu();
     private long score;
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
+    private AnimationTimer gameloop;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage args0) throws Exception{
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.mainMENU(EventHandler.this);
+    }
+    public void startGame(){
         playerBumped = false;
         pauseTheGame = false;
         score = 0;
 
+        Stage stage = new Stage();
         Group root = new Group();
         Scene scene = new Scene(root);
 
@@ -144,7 +150,7 @@ public class EventHandler extends Application {
         });
 
         // Loop
-        AnimationTimer gameloop = new AnimationTimer() {
+        gameloop = new AnimationTimer() {
             @Override
             public void handle(long now) {
 
@@ -242,8 +248,13 @@ public class EventHandler extends Application {
                 stage.close();
             }
             pauseTheGame = menu.resumeGame();
+            if (playerBumped && player.getTranslateY() >= stage.getHeight()) {
+                GameOver over = new GameOver();
+                over.gameOver();
+                stage.close();
+                gameloop.stop();
             }
-
+            }
         };
         gameloop.start();
     }

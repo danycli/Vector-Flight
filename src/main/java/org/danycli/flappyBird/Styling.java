@@ -13,12 +13,12 @@ public class Styling {
         b.setFocusTraversable(false);
         b.setTextFill(Color.WHITE);
         b.setStyle("""
-                -fx-background-color: #32323280;
+                -fx-background-color: #00000080;
                 -fx-background-radius:20;
                 """);
         b.setOnMouseExited((MouseEvent t) ->{
             b.setStyle("""
-                -fx-background-color: #32323280;
+                -fx-background-color: #00000080;
                 -fx-background-radius:20;
                 """);
             b.setTextFill(Color.WHITE);

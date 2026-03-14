@@ -8,35 +8,39 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class PauseMenu {
-    private boolean quitGame;
-    private boolean resumeGamee;
+public class GameOver {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
-
-    public void pauseMenu(){
-        quitGame = false;
-        resumeGamee = true;
-
+    
+    public void gameOver(){
         Stage stage = new Stage();
         StackPane root = new StackPane();
-        Scene scene = new Scene(root,400,550);
+        Scene scene = new Scene(root,450,650);
 
-        Button resume = Styling.buttonStyling("RESUME", -70);
-        resume.setFont(font);
+        Button playAgain = Styling.buttonStyling("PLAY AGAIN", -240);
+        playAgain.setFont(font);
 
-        Button exit = Styling.buttonStyling("QUIT GAME", 70);
+        Button gameMod = Styling.buttonStyling("GAME MOD",-100);
+        gameMod.setFont(font);
+
+        Button summary = Styling.buttonStyling("Game Summary",40);
+        summary.setFont(font);
+
+        Button exit = Styling.buttonStyling("QUIT GAME", 180);
         exit.setFont(font);
 
-        root.getChildren().add(resume);
+        root.getChildren().add(playAgain);
+        root.getChildren().add(gameMod);
+        root.getChildren().add(summary);
         root.getChildren().add(exit);
 
-        resume.setOnAction(e ->{
+
+        playAgain.setOnAction(e ->{
             stage.close();
-            resumeGamee = false;
+            EventHandler event = new EventHandler();
+            event.startGame();
         });
         exit.setOnAction(e ->{
             stage.close();
-            quitGame = true;
         });
 
         stage.setScene(scene);
@@ -48,11 +52,6 @@ public class PauseMenu {
             -fx-background-radius: 20;
         """);
         stage.show();
-    }
-    public boolean closeGame(){
-        return quitGame;
-    }
-    public boolean resumeGame(){
-        return resumeGamee;
+        stage.setAlwaysOnTop(true);
     }
 }
