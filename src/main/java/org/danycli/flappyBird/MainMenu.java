@@ -11,8 +11,10 @@ import javafx.stage.StageStyle;
 public class MainMenu {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
     private boolean playGame;
+    private String mod;
 
     public void mainMENU(EventHandler event){
+        mod = null;
         playGame = false;
         Stage stage = new Stage();
         StackPane root = new StackPane();
@@ -34,10 +36,16 @@ public class MainMenu {
 
         play.setOnAction(e ->{
             stage.close();
+            event.setMod(mod);
             event.startGame();
         });
         exit.setOnAction(e ->{
             stage.close();
+        });
+        GameOver over = new GameOver();
+        gameMod.setOnAction(e ->{
+            GameMod Mod = new GameMod();
+            Mod.mod(MainMenu.this,over);
         });
 
         stage.setScene(scene);
@@ -53,5 +61,8 @@ public class MainMenu {
     }
     public boolean startGame(){
         return playGame;
+    }
+    public void setMod(String Mod){
+        mod = Mod;
     }
 }

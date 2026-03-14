@@ -24,6 +24,7 @@ public class EventHandler extends Application {
     private long score;
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
     private AnimationTimer gameloop;
+    private String gameMod;
 
     @Override
     public void start(Stage args0) throws Exception{
@@ -34,15 +35,19 @@ public class EventHandler extends Application {
         playerBumped = false;
         pauseTheGame = false;
         score = 0;
+        if (gameMod == null) {
+            gameMod = "Heaven";
+        }
 
         Stage stage = new Stage();
         Group root = new Group();
         Scene scene = new Scene(root);
 
+        //Setting the props on the stage
         // Background
-        Image back = new Image(getClass().getResourceAsStream("/Day1.png"));
+        Image back = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"1.png"));
         ImageView bg = new ImageView(back);
-        Image back2 = new Image(getClass().getResourceAsStream("/Day2.png"));
+        Image back2 = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"2.png"));
         ImageView bk = new ImageView(back2);
         Text scoreBoard = new Text("SCORE = "+score);
         scoreBoard.setTranslateX(10);
@@ -89,7 +94,7 @@ public class EventHandler extends Application {
         Rectangle pipe1 = new Rectangle(210,395);
         pipe1.setVisible(false);
         allRecs.add(pipe1);
-        Image downwards = new Image(getClass().getResourceAsStream("/Downwards.png"));
+        Image downwards = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"Downwards.png"));
         ImageView down = new ImageView(downwards);
         // down.set
         down.setFitHeight(400);
@@ -102,7 +107,7 @@ public class EventHandler extends Application {
         Rectangle pipe2 = new Rectangle(210,395);
         pipe2.setVisible(false);
         allRecs.add(pipe2);
-        Image upwards = new Image(getClass().getResourceAsStream("/Upwards.png"));
+        Image upwards = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"Upwards.png"));
         ImageView up = new ImageView(upwards);
         up.setFitHeight(400);
         up.setTranslateY(stage.getHeight() - up.getFitHeight());
@@ -119,7 +124,7 @@ public class EventHandler extends Application {
         forPlayer.setVisible(false);
         forPlayer.setTranslateX(stage.getWidth() / 2 + 50);
         forPlayer.setTranslateY(stage.getHeight() / 2 +50);
-        Image bird = new Image(getClass().getResourceAsStream("/ghost1.png"));
+        Image bird = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"Ghost.png"));
         ImageView player = new ImageView(bird);
         player.setTranslateX(stage.getWidth() / 2);
         player.setTranslateY(stage.getHeight() / 2);
@@ -257,5 +262,8 @@ public class EventHandler extends Application {
             }
         };
         gameloop.start();
+    }
+    public void setMod(String mod){
+        gameMod = mod;
     }
 }

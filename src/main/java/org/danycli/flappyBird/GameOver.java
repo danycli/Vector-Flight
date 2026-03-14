@@ -10,8 +10,11 @@ import javafx.stage.StageStyle;
 
 public class GameOver {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
+    private String mod;
     
     public void gameOver(){
+        mod = null;
+
         Stage stage = new Stage();
         StackPane root = new StackPane();
         Scene scene = new Scene(root,450,650);
@@ -22,7 +25,7 @@ public class GameOver {
         Button gameMod = Styling.buttonStyling("GAME MOD",-100);
         gameMod.setFont(font);
 
-        Button summary = Styling.buttonStyling("Game Summary",40);
+        Button summary = Styling.buttonStyling("GAME STATS",40);
         summary.setFont(font);
 
         Button exit = Styling.buttonStyling("QUIT GAME", 180);
@@ -37,7 +40,13 @@ public class GameOver {
         playAgain.setOnAction(e ->{
             stage.close();
             EventHandler event = new EventHandler();
+            event.setMod(mod);
             event.startGame();
+        });
+        MainMenu menu = new MainMenu();
+        gameMod.setOnAction(e ->{
+            GameMod Mod = new GameMod();
+            Mod.mod(menu,GameOver.this);
         });
         exit.setOnAction(e ->{
             stage.close();
@@ -53,5 +62,9 @@ public class GameOver {
         """);
         stage.show();
         stage.setAlwaysOnTop(true);
+    }
+
+    public void setMod(String mod) {
+        this.mod = mod;
     }
 }
