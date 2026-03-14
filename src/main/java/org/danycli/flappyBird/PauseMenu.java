@@ -9,30 +9,50 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class PauseMenu {
-    
+    private boolean quitGame;
+    private boolean resumeGamee;
+    private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
 
     public void pauseMenu(){
+        quitGame = false;
+        resumeGamee = true;
+
         Stage stage = new Stage();
         StackPane root = new StackPane();
         Scene scene = new Scene(root,400,550);
 
-        Button resume = Styling.buttonStyling("RESUME", -50);
-        resume.setFont(Font.font("Amasis MT Pro Black",30));
+        Button resume = Styling.buttonStyling("RESUME", -70);
+        resume.setFont(font);
 
-        Button exit = Styling.buttonStyling("Quit Game", 50);
-        exit.setFont(Font.font("Amasis MT Pro Black",30));
+        Button exit = Styling.buttonStyling("QUIT GAME", 70);
+        exit.setFont(font);
 
         root.getChildren().add(resume);
         root.getChildren().add(exit);
+
+        resume.setOnAction(e ->{
+            stage.close();
+            resumeGamee = false;
+        });
+        exit.setOnAction(e ->{
+            stage.close();
+            quitGame = true;
+        });
 
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initStyle(StageStyle.TRANSPARENT);
         scene.setFill(Color.TRANSPARENT);
         root.setStyle("""
-            -fx-background-color: #00d8fe;
+            -fx-background-color: #008330;
             -fx-background-radius: 20;
         """);
         stage.show();
+    }
+    public boolean closeGame(){
+        return quitGame;
+    }
+    public boolean resumeGame(){
+        return resumeGamee;
     }
 }

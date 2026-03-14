@@ -10,18 +10,25 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class EventHandler extends Application {
-    private boolean escapePressed;
     private boolean playerBumped;
+    private boolean pauseTheGame;
+    private final PauseMenu menu = new PauseMenu();
+    private long score;
+    private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
 
     @Override
     public void start(Stage stage) throws Exception {
-        escapePressed = false;
         playerBumped = false;
+        pauseTheGame = false;
+        score = 0;
 
         Group root = new Group();
         Scene scene = new Scene(root);
@@ -31,14 +38,34 @@ public class EventHandler extends Application {
         ImageView bg = new ImageView(back);
         Image back2 = new Image(getClass().getResourceAsStream("/Day2.png"));
         ImageView bk = new ImageView(back2);
+        Text scoreBoard = new Text("SCORE = "+score);
+        scoreBoard.setTranslateX(10);
+        scoreBoard.setTranslateY(50);
+        scoreBoard.setFont(font);
+        scoreBoard.setFill(Color.ALICEBLUE);
+
+        Rectangle scoreRectangle = new Rectangle();
+        scoreRectangle.setStyle(
+            "-fx-fill: #00d8fe7b;" +
+            "-fx-arc-width: 30;" +
+            "-fx-arc-height: 30;"
+        );
+        scoreRectangle.setWidth(scoreBoard.getLayoutBounds().getWidth() + 15);
+        scoreRectangle.setHeight(scoreBoard.getLayoutBounds().getHeight() + 10);
+        scoreRectangle.setTranslateX(0);
+        scoreRectangle.setTranslateY(0);
 
         root.getChildren().add(bg);
         root.getChildren().add(bk);
+        root.getChildren().add(scoreRectangle);
+        root.getChildren().add(scoreBoard);
 
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setFullScreen(true);
         stage.fullScreenExitHintProperty().set("Press Esc to pause the game");
+        stage.setMinHeight(stage.getHeight() - 10);
+        stage.setMinWidth(stage.getWidth() - 10);
         stage.show();
 
         bg.setFitHeight(stage.getHeight() + 20);
@@ -64,7 +91,6 @@ public class EventHandler extends Application {
         down.setTranslateX(stage.getWidth());
         pipe1.setTranslateY(0);
         pipe1.setTranslateX(stage.getWidth() + 55);
-        // down.setPickOnBounds(false);
         obstacles.add(down);
 
         Rectangle pipe2 = new Rectangle(210,395);
@@ -74,10 +100,10 @@ public class EventHandler extends Application {
         ImageView up = new ImageView(upwards);
         up.setFitHeight(400);
         up.setTranslateY(stage.getHeight() - up.getFitHeight());
-        up.setTranslateX(stage.getWidth() - 4);
+        up.setTranslateX(stage.getWidth());
         pipe2.setTranslateY(stage.getHeight() - pipe2.getHeight());
-        pipe2.setTranslateX(stage.getWidth() - 51);
-        // up.setPickOnBounds(false);
+        pipe2.setTranslateX(stage.getWidth() + 55);
+        up.setPickOnBounds(false);
         obstacles.add(up);
 
         root.getChildren().add(pipe1);
@@ -97,19 +123,24 @@ public class EventHandler extends Application {
         root.getChildren().add(down);
         root.getChildren().add(up);
 
-        PauseMenu menu = new PauseMenu();
+        // PauseMenu menu = new PauseMenu();
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ESCAPE && !escapePressed) {
-                stage.setHeight(stage.getHeight() - 10);
-                stage.setWidth(stage.getWidth() - 10);
+            if (e.getCode() == KeyCode.ESCAPE) {
                 stage.setX(0);
                 stage.setY(0);
-                escapePressed = true;
+                pauseTheGame = true;
                 menu.pauseMenu();
+                bg.setFitHeight(stage.getHeight() + 20);
+                bg.setFitWidth(stage.getWidth() + 20);
+                bk.setFitHeight(stage.getHeight() + 20);
+                bk.setFitWidth(stage.getWidth() + 20);
             } else if (e.getCode() == KeyCode.SPACE && !playerBumped) {
                 player.setTranslateY(player.getTranslateY() - 70);
                 forPlayer.setTranslateY(forPlayer.getTranslateY() - 70);
-            }
+            } 
+            // else if (e.getCode() == KeyCode.F11) {
+            //     stage.setFullScreen(true);
+            // }
         });
 
         // Loop
@@ -117,7 +148,11 @@ public class EventHandler extends Application {
             @Override
             public void handle(long now) {
 
-                if (!playerBumped) {
+                if (!pauseTheGame) {
+                stage.setFullScreen(true);
+            }
+
+                if (!playerBumped && !pauseTheGame) {
                     player.setTranslateY(player.getTranslateY() + 3);
                     forPlayer.setTranslateY(forPlayer.getTranslateY() + 3);
                     bg.setTranslateX(bg.getTranslateX() - 3);
@@ -134,11 +169,17 @@ public class EventHandler extends Application {
                             root.getChildren().remove(img);
                         }
                     }
-                }
-                obstacles.removeAll(obstaclesRemove);
-                obstaclesRemove.clear();
-                for(Rectangle rec : allRecs){
+                    for(Rectangle rec : allRecs){
                     rec.setTranslateX(rec.getTranslateX() - 5);
+                    //Incrementing Score
+                if (rec.getTranslateX() == stage.getWidth()/2 + 10) {
+                    score++;
+                    scoreBoard.setText("SCORE = "+score/2);
+                    scoreRectangle.toFront();
+                    scoreBoard.toFront();
+                    scoreRectangle.setWidth(scoreBoard.getLayoutBounds().getWidth() + 15);
+                    scoreRectangle.setHeight(scoreBoard.getLayoutBounds().getHeight() + 10);
+                }
                     if (rec.getTranslateX() < -300) {
                         recRemove.add(rec);
                         root.getChildren().remove(rec);
@@ -149,13 +190,16 @@ public class EventHandler extends Application {
                         break;
                     }
                 }
+                }
+                obstacles.removeAll(obstaclesRemove);
+                obstaclesRemove.clear();
                 allRecs.removeAll(recRemove);
                 recRemove.clear();
 
                 Random random = new Random();
                 int randomNum = random.nextInt(10, 300);
 
-                if (obstacles.get(obstacles.size() - 1).getTranslateX() <= stage.getWidth() / 2 + randomNum && !playerBumped) {
+                if (obstacles.get(obstacles.size() - 1).getTranslateX() <= stage.getWidth() / 2 + randomNum && !playerBumped && !pauseTheGame) {
                     int yAxisOfObstacle = random.nextInt(100,400);
                     yAxisOfObstacle = -yAxisOfObstacle;
 
@@ -183,8 +227,9 @@ public class EventHandler extends Application {
                     root.getChildren().add(addUp);
                     root.getChildren().add(pipeDown);
                     root.getChildren().add(pipeUp);
+
                 }
-                if (player.getTranslateY() + 70 >= stage.getHeight() && !playerBumped) {
+                if (player.getTranslateY() + 70 >= stage.getHeight() && !playerBumped && !pauseTheGame) {
                     playerBumped = true;
                 }
 
@@ -192,11 +237,14 @@ public class EventHandler extends Application {
                     player.setTranslateY(player.getTranslateY() + 5);
                     player.setScaleY(-1);
                 }
+
+                if (menu.closeGame()) {
+                stage.close();
+            }
+            pauseTheGame = menu.resumeGame();
             }
 
         };
         gameloop.start();
-
     }
-
 }
