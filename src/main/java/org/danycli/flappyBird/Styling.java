@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 
 public class Styling {
     public static Button buttonStyling(String text, int y){
+
         Button b = new Button(text);
         b.setTranslateY(y);
         b.setBorder(Border.EMPTY);
@@ -16,6 +17,7 @@ public class Styling {
                 -fx-background-color: #00000080;
                 -fx-background-radius:20;
                 """);
+
         b.setOnMouseExited((MouseEvent t) ->{
             b.setStyle("""
                 -fx-background-color: #00000080;
@@ -23,6 +25,7 @@ public class Styling {
                 """);
             b.setTextFill(Color.WHITE);
         });
+
         b.setOnMouseEntered((MouseEvent t) -> {
             b.setStyle("""
                     -fx-background-color: #ffffff79;
@@ -30,6 +33,7 @@ public class Styling {
                     """);
             b.setTextFill(Color.BLACK);
         });
+        
         return b;
     }
 }

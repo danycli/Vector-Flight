@@ -15,6 +15,7 @@ public class EquippedPopUp {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),45);
     
     public void cautionPopUp(String Text){
+
         Stage stage = new Stage();
         StackPane root = new StackPane();
         Scene scene = new Scene(root,300,200);
@@ -23,7 +24,6 @@ public class EquippedPopUp {
         text.setFont(font);
         text.setFill(Color.WHITE);
         root.getChildren().add(text);
-
 
         Image icon = new Image(getClass().getResourceAsStream("/VectorFlight.png"));
 
@@ -39,12 +39,10 @@ public class EquippedPopUp {
             -fx-background-color: #1a5c5ce6;
             -fx-background-radius: 30;
         """);
-
         stage.show();
         
         PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
         delay.setOnFinished(e -> stage.close());
         delay.play();
-
     }
 }

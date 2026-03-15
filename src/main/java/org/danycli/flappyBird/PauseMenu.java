@@ -15,6 +15,7 @@ public class PauseMenu {
     private final Font font = Font.loadFont(getClass().getResourceAsStream("/Font/Linkara.otf"),50);
 
     public void pauseMenu(){
+
         quitGame = false;
         resumeGamee = true;
 
@@ -35,6 +36,7 @@ public class PauseMenu {
             stage.close();
             resumeGamee = false;
         });
+
         exit.setOnAction(e ->{
             stage.close();
             quitGame = true;
@@ -54,9 +56,11 @@ public class PauseMenu {
         """);
         stage.show();
     }
+
     public boolean closeGame(){
         return quitGame;
     }
+    
     public boolean resumeGame(){
         return resumeGamee;
     }

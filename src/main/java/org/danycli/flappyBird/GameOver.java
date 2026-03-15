@@ -16,6 +16,7 @@ public class GameOver {
     private long highScore;
     
     public void gameOver(long scoree, long highScoree){
+
         score = scoree;
         highScore = highScoree;
         mod = null;
@@ -41,22 +42,24 @@ public class GameOver {
         root.getChildren().add(summary);
         root.getChildren().add(exit);
 
-
         playAgain.setOnAction(e ->{
             stage.close();
             EventHandler event = new EventHandler();
             event.setMod(mod);
             event.startGame();
         });
+
         MainMenu menu = new MainMenu();
         gameMod.setOnAction(e ->{
             GameMod Mod = new GameMod();
             Mod.mod(menu,GameOver.this);
         });
+
         summary.setOnAction(e ->{
             GameStats stats = new GameStats();
             stats.gameStats(score, highScore);
         });
+        
         exit.setOnAction(e ->{
             stage.close();
         });

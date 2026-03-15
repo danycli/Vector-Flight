@@ -14,7 +14,9 @@ public class GameMod {
     private String gameMod;
 
     public void mod(MainMenu menu, GameOver over){
+
         gameMod = null;
+        
         Stage stage = new Stage();
         StackPane root = new StackPane();
         Scene scene = new Scene(root,350,450);

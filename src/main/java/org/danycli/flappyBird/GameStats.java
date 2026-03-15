@@ -16,6 +16,7 @@ public class GameStats {
     private long highScore;
 
     public void gameStats(long scoree, long highScoree){
+        
         this.score = scoree;
         this.highScore = highScoree;
 

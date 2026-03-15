@@ -15,6 +15,7 @@ public class MainMenu {
     private String mod;
 
     public void mainMENU(EventHandler event){
+
         mod = null;
         playGame = false;
         Stage stage = new Stage();
@@ -34,15 +35,16 @@ public class MainMenu {
         root.getChildren().add(gameMod);
         root.getChildren().add(exit);
 
-
         play.setOnAction(e ->{
             stage.close();
             event.setMod(mod);
             event.startGame();
         });
+
         exit.setOnAction(e ->{
             stage.close();
         });
+
         GameOver over = new GameOver();
         gameMod.setOnAction(e ->{
             GameMod Mod = new GameMod();
@@ -64,9 +66,11 @@ public class MainMenu {
         stage.show();
         stage.setAlwaysOnTop(true);
     }
+
     public boolean startGame(){
         return playGame;
     }
+    
     public void setMod(String Mod){
         mod = Mod;
     }
