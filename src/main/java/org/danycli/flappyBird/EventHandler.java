@@ -123,6 +123,7 @@ public class EventHandler extends Application {
         root.getChildren().add(HighScoreBoard);
         root.getChildren().add(HighScoreRectangle);
 
+        stage.setTitle("Vector Flight");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setFullScreen(true);

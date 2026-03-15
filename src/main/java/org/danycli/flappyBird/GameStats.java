@@ -43,6 +43,7 @@ public class GameStats {
         root.getChildren().add(HighScore);
         root.getChildren().add(exit);
 
+        stage.setTitle("Game Stats");
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initStyle(StageStyle.TRANSPARENT);

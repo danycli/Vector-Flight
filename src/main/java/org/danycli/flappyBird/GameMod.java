@@ -16,30 +16,33 @@ public class GameMod {
         gameMod = null;
         Stage stage = new Stage();
         StackPane root = new StackPane();
-        Scene scene = new Scene(root,350,400);
+        Scene scene = new Scene(root,350,450);
 
-        Button Heaven = Styling.buttonStyling("Heaven", -50);
+        Button Heaven = Styling.buttonStyling("Heaven", -70);
         Heaven.setFont(font);
 
-        Button Hell = Styling.buttonStyling("Hell",50);
+        Button Hell = Styling.buttonStyling("Hell",70);
         Hell.setFont(font);
 
         root.getChildren().add(Heaven);
         root.getChildren().add(Hell);
-
+        EquippedPopUp equip = new EquippedPopUp();
         Heaven.setOnAction(e ->{
             gameMod = "Heaven";
             menu.setMod(gameMod);
             over.setMod(gameMod);
             stage.close();
+            equip.cautionPopUp("  HEAVEN\nSELECTED");
         });
         Hell.setOnAction(e ->{
             gameMod = "Hell";
             menu.setMod(gameMod);
             over.setMod(gameMod);
             stage.close();
+            equip.cautionPopUp("     HELL\nSELECTED");
         });
 
+        stage.setTitle("Game Mod");
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initStyle(StageStyle.TRANSPARENT);

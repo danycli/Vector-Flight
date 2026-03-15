@@ -48,6 +48,7 @@ public class MainMenu {
             Mod.mod(MainMenu.this,over);
         });
 
+        stage.setTitle("Main Menu");
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initStyle(StageStyle.TRANSPARENT);

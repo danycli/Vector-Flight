@@ -39,6 +39,7 @@ public class PauseMenu {
             quitGame = true;
         });
 
+        stage.setTitle("Pause Menu");
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.initStyle(StageStyle.TRANSPARENT);
