@@ -35,6 +35,7 @@ public class EventHandler extends Application {
     private double PlayerSpeedDownwards;
     private double PlayerSpeedUpwards;
     private boolean goUp;
+    private String rectangleFillForScore;
 
     @Override
     public void start(Stage args0) throws Exception{
@@ -77,6 +78,12 @@ public class EventHandler extends Application {
             System.out.println("Something went wrong wile fetching high score");
         }
 
+        //Rectangle fill forscore and high score
+        if (gameMod.equals("Heaven")) {
+            rectangleFillForScore = "#00d8fe7b";
+        }else{
+            rectangleFillForScore = "#9d25257b";
+        }
 
         // Background
         Image back = new Image(getClass().getResourceAsStream("/"+gameMod+"/"+gameMod+"1.png"));
@@ -92,7 +99,7 @@ public class EventHandler extends Application {
 
         Rectangle scoreRectangle = new Rectangle();
         scoreRectangle.setStyle(
-            "-fx-fill: #00d8fe7b;" +
+            "-fx-fill: "+rectangleFillForScore+";" +
             "-fx-arc-width: 30;" +
             "-fx-arc-height: 30;"
         );
@@ -108,7 +115,7 @@ public class EventHandler extends Application {
 
         Rectangle HighScoreRectangle = new Rectangle();
         HighScoreRectangle.setStyle(
-            "-fx-fill: #00d8fe7b;" +
+            "-fx-fill: "+rectangleFillForScore+";" +
             "-fx-arc-width: 30;" +
             "-fx-arc-height: 30;"
         );
