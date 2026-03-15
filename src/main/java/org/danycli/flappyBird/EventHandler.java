@@ -37,6 +37,7 @@ public class EventHandler extends Application {
     private double PlayerSpeedUpwards;
     private boolean goUp;
     private String rectangleFillForScore;
+    private boolean ObstaclesBumping;
 
     @Override
     public void start(Stage args0) throws Exception {
@@ -48,6 +49,7 @@ public class EventHandler extends Application {
 
     public void startGame() {
 
+        ObstaclesBumping = false;
         playerBumped = false;
         pauseTheGame = false;
         goUp = false;
@@ -213,6 +215,31 @@ public class EventHandler extends Application {
             }
         });
 
+        //Checking for the overlapping of the Obstacles as it would only happens on changing by changing the resolution of the monitor
+        //It is kond of making it responsive
+        if (down.getBoundsInParent().intersects(up.getBoundsInParent()) || pipe1.getBoundsInParent().intersects(pipe2.getBoundsInParent())) {
+            down.setTranslateY(-150);
+            up.setTranslateY(stage.getHeight() - (up.getFitHeight() - 150));
+            down.setFitWidth(200);
+            up.setFitWidth(200);
+
+            pipe1.setTranslateY(-150);
+            pipe2.setTranslateY(stage.getHeight() - (pipe2.getHeight() - 150));
+            pipe1.setWidth(pipe1.getWidth()/2 + 20);
+            pipe2.setWidth(pipe2.getWidth()/2 + 20);
+            pipe1.setTranslateX(stage.getWidth() + 30);
+            pipe2.setTranslateX(stage.getWidth() + 30);
+
+            player.setFitWidth(player.getLayoutBounds().getWidth()/2);
+            player.setFitHeight(player.getLayoutBounds().getHeight()/2);
+
+            forPlayer.setRadius(forPlayer.getRadius()/2);
+            forPlayer.setTranslateX(stage.getWidth() / 2 + 25);
+            forPlayer.setTranslateY(stage.getHeight() / 2 + 25);
+
+            ObstaclesBumping = true;
+        }
+
         // Loop
         gameloop = new AnimationTimer() {
             @Override
@@ -244,13 +271,6 @@ public class EventHandler extends Application {
 
                     bg.setTranslateX(bg.getTranslateX() - 3);
                     bk.setTranslateX(bk.getTranslateX() - 3);
-
-                    //Repeating the background
-                    if (bk.getTranslateX() == 0 && !playerBumped) {
-                        bg.setTranslateX(stage.getWidth());
-                    } else if (bg.getTranslateX() == 0 && !playerBumped) {
-                        bk.setTranslateX(stage.getWidth());
-                    }
 
                     //Removing the obstacles that are not on the screen anymore
                     for (ImageView img : obstacles) {
@@ -295,6 +315,16 @@ public class EventHandler extends Application {
                 allRecs.removeAll(recRemove);
                 recRemove.clear();
 
+                //Repeating the background
+                if (!playerBumped) {
+                    if (bg.getTranslateX() <= -bg.getFitWidth()) {
+                        bg.setTranslateX(bk.getTranslateX() + bk.getFitWidth() - 13);
+                    }
+                    if (bk.getTranslateX() <= -bk.getFitWidth()) {
+                        bk.setTranslateX(bg.getTranslateX() + bg.getFitWidth() - 13);
+                    }
+                }
+
                 Random random = new Random();
                 int randomNum = random.nextInt(10, 300);
 
@@ -321,6 +351,20 @@ public class EventHandler extends Application {
                     pipeUp.setTranslateX(stage.getWidth() + 55);
                     allRecs.add(pipeUp);
                     obstacles.add(addUp);
+
+                    if (ObstaclesBumping) {
+                        addDown.setTranslateY(yAxisOfObstacle - 120);
+                        addUp.setTranslateY(stage.getHeight() - addUp.getLayoutBounds().getHeight() + (650 + yAxisOfObstacle));
+                        addDown.setFitWidth(200);
+                        addUp.setFitWidth(200);
+                        
+                        pipeDown.setTranslateY(yAxisOfObstacle - 120);
+                        pipeUp.setTranslateY(stage.getHeight() - addUp.getLayoutBounds().getHeight() + (700 + yAxisOfObstacle));
+                        pipeDown.setWidth(pipe1.getWidth()/2 + 20);
+                        pipeUp.setWidth(pipe1.getWidth()/2 + 20);
+                        pipeDown.setTranslateX(stage.getWidth() + 30);
+                        pipeUp.setTranslateX(stage.getWidth() + 30);
+                    }
 
                     root.getChildren().add(addDown);
                     root.getChildren().add(addUp);
