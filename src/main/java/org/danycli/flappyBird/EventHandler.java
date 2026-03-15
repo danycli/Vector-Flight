@@ -32,6 +32,9 @@ public class EventHandler extends Application {
     private AnimationTimer gameloop;
     private String gameMod;
     private long highScore;
+    private double PlayerSpeedDownwards;
+    private double PlayerSpeedUpwards;
+    private boolean goUp;
 
     @Override
     public void start(Stage args0) throws Exception{
@@ -42,7 +45,10 @@ public class EventHandler extends Application {
     public void startGame(){
         playerBumped = false;
         pauseTheGame = false;
+        goUp = false;
+        PlayerSpeedUpwards = 1;
         score = 0;
+        PlayerSpeedDownwards = 0;
         highScore = 0;
         if (gameMod == null) {
             gameMod = "Heaven";
@@ -169,7 +175,7 @@ public class EventHandler extends Application {
         root.getChildren().add(pipe1);
         root.getChildren().add(pipe2);
 
-        Circle forPlayer = new Circle(30);
+        Circle forPlayer = new Circle(40);
         forPlayer.setVisible(false);
         forPlayer.setTranslateX(stage.getWidth() / 2 + 50);
         forPlayer.setTranslateY(stage.getHeight() / 2 +50);
@@ -195,12 +201,10 @@ public class EventHandler extends Application {
                 bk.setFitHeight(stage.getHeight() + 20);
                 bk.setFitWidth(stage.getWidth() + 20);
             } else if (e.getCode() == KeyCode.SPACE && !playerBumped) {
-                player.setTranslateY(player.getTranslateY() - 70);
-                forPlayer.setTranslateY(forPlayer.getTranslateY() - 70);
+                PlayerSpeedUpwards = 0;
+                PlayerSpeedDownwards = 0;
+                goUp = true;
             } 
-            // else if (e.getCode() == KeyCode.F11) {
-            //     stage.setFullScreen(true);
-            // }
         });
 
         // Loop
@@ -213,8 +217,24 @@ public class EventHandler extends Application {
             }
 
                 if (!playerBumped && !pauseTheGame) {
-                    player.setTranslateY(player.getTranslateY() + 3);
-                    forPlayer.setTranslateY(forPlayer.getTranslateY() + 3);
+                    //player speed moving downwards
+                    if (PlayerSpeedDownwards <= 3 && !goUp) {
+                        PlayerSpeedDownwards += 0.1;
+                        player.setTranslateY(player.getTranslateY() + PlayerSpeedDownwards);
+                        forPlayer.setTranslateY(forPlayer.getTranslateY() + PlayerSpeedDownwards);
+                    }else if(goUp){
+                        PlayerSpeedDownwards += 1;
+                        player.setTranslateY(player.getTranslateY() - PlayerSpeedDownwards);
+                        forPlayer.setTranslateY(forPlayer.getTranslateY() - PlayerSpeedDownwards);
+                        PlayerSpeedUpwards ++;
+                        if (PlayerSpeedUpwards >= 12) {
+                            goUp = false;
+                        }
+                    }
+                    else{
+                        player.setTranslateY(player.getTranslateY() + 3);
+                        forPlayer.setTranslateY(forPlayer.getTranslateY() + 3);
+                    }
                     bg.setTranslateX(bg.getTranslateX() - 3);
                     bk.setTranslateX(bk.getTranslateX() - 3);
                     if (bk.getTranslateX() == 0 && !playerBumped) {
@@ -236,7 +256,7 @@ public class EventHandler extends Application {
                     for(Rectangle rec : allRecs){
                     rec.setTranslateX(rec.getTranslateX() - 5);
                     //Incrementing Score
-                if (rec.getTranslateX() == stage.getWidth()/2 + 10) {
+                if (rec.getTranslateX() == stage.getWidth()/2 - 50) {
                     score++;
                     scoreBoard.setText("SCORE = "+score/2);
                     scoreRectangle.setWidth(scoreBoard.getLayoutBounds().getWidth() + 15);
