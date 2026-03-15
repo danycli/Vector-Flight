@@ -123,6 +123,9 @@ public class EventHandler extends Application {
         root.getChildren().add(HighScoreBoard);
         root.getChildren().add(HighScoreRectangle);
 
+        Image icon = new Image(getClass().getResourceAsStream("/VectorFlight.png"));
+
+        stage.getIcons().add(icon);
         stage.setTitle("Vector Flight");
         stage.setScene(scene);
         stage.setResizable(false);
@@ -220,7 +223,7 @@ public class EventHandler extends Application {
                 if (!playerBumped && !pauseTheGame) {
                     //player speed moving downwards
                     if (PlayerSpeedDownwards <= 3 && !goUp) {
-                        PlayerSpeedDownwards += 0.1;
+                        PlayerSpeedDownwards += 0.4;
                         player.setTranslateY(player.getTranslateY() + PlayerSpeedDownwards);
                         forPlayer.setTranslateY(forPlayer.getTranslateY() + PlayerSpeedDownwards);
                     }else if(goUp){
@@ -230,6 +233,7 @@ public class EventHandler extends Application {
                         PlayerSpeedUpwards ++;
                         if (PlayerSpeedUpwards >= 12) {
                             goUp = false;
+                            PlayerSpeedDownwards = 0;
                         }
                     }
                     else{

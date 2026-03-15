@@ -2,6 +2,7 @@ package org.danycli.flappyBird;
 
 import javafx.animation.PauseTransition;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,6 +25,9 @@ public class EquippedPopUp {
         root.getChildren().add(text);
 
 
+        Image icon = new Image(getClass().getResourceAsStream("/VectorFlight.png"));
+
+        stage.getIcons().add(icon);
         stage.setTitle("Pop Up");
         stage.setScene(scene);
         stage.setResizable(false);

@@ -2,6 +2,7 @@ package org.danycli.flappyBird;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -43,6 +44,9 @@ public class GameStats {
         root.getChildren().add(HighScore);
         root.getChildren().add(exit);
 
+        Image icon = new Image(getClass().getResourceAsStream("/VectorFlight.png"));
+
+        stage.getIcons().add(icon);
         stage.setTitle("Game Stats");
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
