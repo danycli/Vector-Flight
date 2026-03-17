@@ -130,7 +130,8 @@ Controls can be remapped inside the event handling system.
 ---
 ## 🎥 Gameplay Preview
 
-[![Watch Gameplay](src/main/resources/ScreenShots/Heaven.png)](https://youtu.be/JqDUY0lhz5U)
+<video src="src/main/resources/ScreenShots/Video.mp4" controls width="700"></video>
+
 ---
 
 ## 🗺️ Future Improvements
