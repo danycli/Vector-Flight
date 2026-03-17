@@ -130,7 +130,7 @@ Controls can be remapped inside the event handling system.
 ---
 ## 🎥 Gameplay Preview
 
-<video src="src/main/resources/ScreenShots/Video.mp4" controls width="700"></video>
+https://github.com/user-attachments/assets/0e79a3df-e131-49d8-ada3-d87b497d8a78
 
 ---
 
