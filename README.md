@@ -161,8 +161,6 @@ You may contribute by:
 
 ---
 
----
-
 ## 👨‍💻 Developer
 
 **Danial Ahmed**  
