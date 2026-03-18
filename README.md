@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Platform-Windows-blue">
 </p>
 
----
+--- 
 
 ## 🎮 Gameplay Overview
 
