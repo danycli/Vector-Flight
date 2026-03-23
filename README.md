@@ -36,7 +36,7 @@ Built completely using **JavaFX**, this project focuses on strong **OOP architec
   Play instantly without installing Java or configuring runtime environments.
 
 - 🌍 **Dual Environment System**  
-  Unique sprites, obstacle logic, and atmosphere variations between realms.
+  Unique sprites, obstacle logic, and atmosphere variations between realms. 
 
 - 💾 **Persistent Save System**  
   Custom `SaveManager` handles:
