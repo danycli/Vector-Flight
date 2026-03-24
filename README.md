@@ -22,7 +22,7 @@
 Navigate dangerous environments, survive increasingly difficult obstacle patterns, and push your reflexes to achieve the highest possible score.
 
 The game features two contrasting visual realms:
-
+ 
 - ☁️ **Heaven Realm** — bright, smooth, floating obstacle patterns  
 - 🔥 **Hell Realm** — intense visuals with aggressive directional hazards  
 
