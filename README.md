@@ -24,7 +24,7 @@ Navigate dangerous environments, survive increasingly difficult obstacle pattern
 The game features two contrasting visual realms:
  
 - ☁️ **Heaven Realm** — bright, smooth, floating obstacle patterns  
-- 🔥 **Hell Realm** — intense visuals with aggressive directional hazards  
+- 🔥 **Hell Realm** — intense visuals with aggressive directional hazards   
 
 Built completely using **JavaFX**, this project focuses on strong **OOP architecture**, responsive controls, and lightweight rendering performance.
 
